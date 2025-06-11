@@ -1,28 +1,34 @@
 name: CI
-
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.8"
+          python-version: '3.8'
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: |
-          python -m venv venv
-          . venv/bin/activate
+          python3 -m venv venv
+          source venv/bin/activate
           pip install -r requirements.txt
 
-      - name: Run Tests
+      - name: Run tests
+        env:
+          PYTHONPATH: .
         run: |
-          . venv/bin/activate
-          PYTHONPATH=. pytest
-
+          source venv/bin/activate
+          pytest
